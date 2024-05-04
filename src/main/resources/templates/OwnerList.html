@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="Template.html">
+<head>
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<div layout:fragment="content">
+<main>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">FIRST NAME</th>
+            <th scope="col">LAST NAME</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">ADDRESS</th>
+            <th scope="col">PHONE</th>
+        </tr>
+        </thead>
+        <tbody>
+                <tr th:each="owner:${ownersVue.content}">
+                    <td th:text="${owner.id}"></td>
+                    <td th:text="${owner.firstName}"></td>
+                    <td th:text="${owner.lastName}"></td>
+                    <td th:text="${owner.email}"> </td>
+                    <td th:text="${owner.address}"></td>
+                    <td th:text="${owner.phone}"></td>
+                    <td>
+                        <a onclick="return confirm('Sure?')" th:href="@{DeleteOwner(id=${owner.id})}">Delete</a>
+                    </td>
+                    <td>
+                        <a th:href="@{EditOwner(id=${owner.id})}">Edit</a>
+                    </td>
+                </tr>
+
+        </tbody>
+    </table>
+    <ul class="nav nav-pills">
+        <li th:each="page,status:${pages}">
+            <a th:class="${status.index==currentpage?'btn btn-primary':'btn'}"
+               th:href="@{OwnerList(page=${status.index},size=${size})}"
+               th:text="${status.index+1}">
+
+            </a>
+        </li>
+    </ul>
+
+</main>
+</div>
+<footer>
+    <a th:href="CreateOwner">Customer Creation</a>
+</footer>
+</body>
+</html>
+

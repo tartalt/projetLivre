@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Template.html">
+<head>
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+</head>
+<body>
+<div layout:fragment="content">
+<main>
+    <form th:action="@{saveLivre}" method="post">
+        <div class="form-group">
+            <label for="titre">Title:</label>
+            <input type="text" class="form-control" id="titre" name="titre" th:field="${livre.titre}">
+        </div>
+        <div class="form-group">
+            <label for="auteur">Author:</label>
+            <input type="text" class="form-control" id="auteur" name="auteur" th:field="${livre.auteur}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" name="description" th:field="${livre.description}"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Book</button>
+    </form>
+</main>
+</div>
+</body>
+</html>
