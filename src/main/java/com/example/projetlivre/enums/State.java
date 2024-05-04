@@ -7,4 +7,5 @@ public enum State {
     Accepted_by_1,
     Refused_by_2,
     Refused_by_1,
+    Full_accepted
 }

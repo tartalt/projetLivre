@@ -1,8 +1,10 @@
 package com.example.projetlivre.security.services;
+import com.example.projetlivre.entities.Owner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 
+import java.security.PrivateKey;
 import java.util.Collection;
 
 
@@ -23,12 +25,15 @@ public class CustomUserDetails extends User {
     public void setCan(boolean can) {
         this.can = can;
     }
+
+
     private String Id;
     private boolean can;
     public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, boolean can, String Id) {
         super(username, password,true, true, true, true, authorities);
         this.Id = Id;
         this.can = can;
+
 
 
     }

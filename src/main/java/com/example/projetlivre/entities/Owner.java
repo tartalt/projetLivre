@@ -35,7 +35,10 @@ public class Owner {
     private String email;
     @NotBlank(message = "error phone")
     private String phone;
+    @NotBlank(message = "error phone")
     private String address;
+    @Column
+    private boolean possede;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Livre> livres=new ArrayList<>();

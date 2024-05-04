@@ -17,4 +17,6 @@ public interface ServiceLivre {
     Livre getLivreByID(Long Id);
     List<Livre> getAllLivres();
     Page<Livre> getAllLivresByPage(int page, int size);
+    List<Livre> getAllLivresDisponiblesByOwner(Owner owner);
+
 }

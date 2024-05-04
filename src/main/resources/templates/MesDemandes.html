@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Template.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des demandes d'échanges reçues</title>
+</head>
+<body>
+<h1>Liste des demandes d'échanges reçues</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Proposé par</th>
+        <th>Livre demandé</th>
+        <th>En échange de</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="echange : ${demandesEchange}">
+        <td th:text="${echange.owner1.nom + ' ' + echange.owner1.prenom}"></td>
+        <td th:text="${echange.livre2.titre}"></td>
+        <td><a th:href="@{'/bibliotheque/' + ${echange.owner1.id}}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

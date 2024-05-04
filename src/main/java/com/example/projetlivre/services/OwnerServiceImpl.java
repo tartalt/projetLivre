@@ -1,6 +1,8 @@
 package com.example.projetlivre.services;
 
+import com.example.projetlivre.entities.Livre;
 import com.example.projetlivre.entities.Owner;
+import com.example.projetlivre.repositories.LivreRepo;
 import com.example.projetlivre.repositories.OwnerRepo;
 import com.example.projetlivre.security.entites.User;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OwnerServiceImpl implements OwnerService{
     private OwnerRepo ownerRepo;
+    private LivreRepo livreRepo;
     @Override
     public Owner saveOwner(Owner owner) {
         return ownerRepo.save(owner);
@@ -36,6 +39,12 @@ public class OwnerServiceImpl implements OwnerService{
     @Override
     public Owner getOwnerByID(String Id) {
         return ownerRepo.findById(Id).get();
+    }
+
+    @Override
+    public boolean hasBook(Owner owner) {
+        List<Livre> livres = livreRepo.findAllByOwner(owner);
+        return !livres.isEmpty();
     }
 
     @Override

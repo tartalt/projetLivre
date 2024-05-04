@@ -11,14 +11,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 @AllArgsConstructor
+@Transactional
 public class OwnerController {
     private final AccountService accountService;
     private OwnerService ownerService;
@@ -56,7 +59,6 @@ public class OwnerController {
         modelMap.addAttribute("ownersVue",owners);
         modelMap.addAttribute("currentpage",page);
         modelMap.addAttribute("pages",new int[owners.getTotalPages()]);
-
         return "OwnerList";
     }
     @RequestMapping("/DeleteOwner")

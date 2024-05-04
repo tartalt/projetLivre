@@ -13,6 +13,7 @@ public interface OwnerService {
     void deleteOwnerById(String Id);
     void deleteAllOwners();
     Owner getOwnerByID(String Id);
+    boolean hasBook(Owner owner);
     List<Owner> getAllOwners();
     Page<Owner> getAllOwnersByPage(int page,int size);
 }

@@ -1,7 +1,9 @@
 package com.example.projetlivre.services;
 
 import com.example.projetlivre.entities.Livre;
+import com.example.projetlivre.entities.Owner;
 import com.example.projetlivre.repositories.LivreRepo;
+import com.example.projetlivre.repositories.OwnerRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +14,11 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class LivreServiceImpl implements ServiceLivre {
+    private final OwnerRepo ownerRepo;
     private LivreRepo livreRepo;
     @Override
     public Livre saveLivre(Livre livre) {
-        livre.setDemande(false);
+        livre.setDisponible(true);
         return livreRepo.save(livre);
     }
 
@@ -51,4 +54,11 @@ public class LivreServiceImpl implements ServiceLivre {
     public Page<Livre> getAllLivresByPage(int page, int size) {
         return livreRepo.findAll(PageRequest.of(page, size));
     }
+
+    @Override
+    public List<Livre> getAllLivresDisponiblesByOwner(Owner owner) {
+        return livreRepo.findAllByOwnerAndDisponibleIsTrue(owner);
+    }
+
+
 }

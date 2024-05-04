@@ -1,5 +1,6 @@
 package com.example.projetlivre.security.services;
 
+import com.example.projetlivre.entities.Owner;
 import com.example.projetlivre.security.entites.Role;
 import com.example.projetlivre.security.entites.User;
 import lombok.AllArgsConstructor;
