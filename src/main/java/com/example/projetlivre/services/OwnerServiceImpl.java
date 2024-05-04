@@ -2,6 +2,7 @@ package com.example.projetlivre.services;
 
 import com.example.projetlivre.entities.Owner;
 import com.example.projetlivre.repositories.OwnerRepo;
+import com.example.projetlivre.security.entites.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,7 @@ public class OwnerServiceImpl implements OwnerService{
     }
 
     @Override
-    public void deleteOwnerById(Long Id) {
+    public void deleteOwnerById(String Id) {
         ownerRepo.deleteById(Id);
     }
 
@@ -33,7 +34,7 @@ public class OwnerServiceImpl implements OwnerService{
     }
 
     @Override
-    public Owner getOwnerByID(Long Id) {
+    public Owner getOwnerByID(String Id) {
         return ownerRepo.findById(Id).get();
     }
 

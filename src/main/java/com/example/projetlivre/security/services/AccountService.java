@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public interface AccountService {
     User createUser(String username,String password, String passwordC);
     Role createRole(String role);
+    User saveUser(User user);
     void addRoleToUser(String username, String role);
     void removeRoleFromUser(String username, String role);
     User loadUserByUsername(String username);

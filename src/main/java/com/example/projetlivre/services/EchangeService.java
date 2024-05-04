@@ -15,4 +15,5 @@ public interface EchangeService {
     void deleteAllEchange();
     Echange getEchangeByID(Long Id);
     List<Echange> getAllEchanges();
+
 }

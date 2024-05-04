@@ -1,10 +1,15 @@
 package com.example.projetlivre.controllers;
 
 import com.example.projetlivre.entities.Owner;
+import com.example.projetlivre.security.entites.User;
+import com.example.projetlivre.security.services.AccountService;
+import com.example.projetlivre.security.services.CustomUserDetails;
 import com.example.projetlivre.services.OwnerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -12,12 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.naming.Binding;
-import java.util.List;
-
 @Controller
 @AllArgsConstructor
 public class OwnerController {
+    private final AccountService accountService;
     private OwnerService ownerService;
     @RequestMapping("/CreateOwner")
     public String createOwner(){
@@ -28,8 +31,22 @@ public class OwnerController {
         if (bindingResult.hasErrors()){
             return "CreateOwner";
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Obtenir l'utilisateur connecté à partir de l'Authentication
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        // Obtenir l'ID de l'utilisateur connecté à partir de CustomUserDetails
+        String userId = userDetails.getId();
+        User user = accountService.loadUserByUsername(userDetails.getUsername());
+        owner.setUser(user);
         Owner saveOwner=ownerService.saveOwner(owner);
-        return "CreateOwner";
+        // Update the 'can' attribute
+        user.setCan(true);
+        accountService.removeRoleFromUser(user.getUsername(),"USER");
+        accountService.addRoleToUser(user.getUsername(),"CONFIRMED");
+        accountService.saveUser(user);
+        return "ListeLivre";
     }
     @RequestMapping("/OwnerList")
     public String Ownerlist(ModelMap modelMap,
@@ -43,7 +60,7 @@ public class OwnerController {
         return "OwnerList";
     }
     @RequestMapping("/DeleteOwner")
-    public String deleteOwner(@RequestParam("id") Long id, ModelMap modelMap,
+    public String deleteOwner(@RequestParam("id") String id, ModelMap modelMap,
                               @RequestParam(name="page",defaultValue = "0")int page,
                               @RequestParam(name="size",defaultValue = "5")int size) {
         ownerService.deleteOwnerById(id);
@@ -56,10 +73,28 @@ public class OwnerController {
     }
 
     @RequestMapping("/EditOwner")
-    public String EditOwner(@RequestParam("id") Long id, ModelMap modelMap) {
+    public String EditOwner(@RequestParam("id") String id, ModelMap modelMap,Authentication authentication) {
         Owner owner = ownerService.getOwnerByID(id);
+
+
+        // Vérifier si l'utilisateur connecté est autorisé à modifier cet Owner
+        if (!isAdmin(authentication) && !isOwner(authentication, owner)) {
+            // Si l'Owner n'appartient pas à l'utilisateur connecté, renvoyer un message d'erreur ou rediriger vers une autre page
+            // Vous pouvez personnaliser ce message selon vos besoins
+            return "AccessDenied";
+        }
         modelMap.addAttribute("ownersVue", owner);
         return "EditOwner";
+    }
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    // Méthode pour vérifier si l'utilisateur est le propriétaire de l'Owner
+    private boolean isOwner(Authentication authentication, Owner owner) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return owner.getUser().getId().equals(userDetails.getId());
     }
     @RequestMapping("/UpdateOwner")
     public String UpdateOwner(@ModelAttribute("ownerVue")Owner owner){

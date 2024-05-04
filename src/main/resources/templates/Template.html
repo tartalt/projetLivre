@@ -21,7 +21,7 @@
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item"
-                       th:if="${#authentication.isAuthenticated() }"
+                       th:if="${#authentication.isAuthenticated() and not #authentication.principal.can}"
                        th:href="@{CreateOwner}">New</a>
                 </li>
                 <li><a class="dropdown-item" th:href="@{OwnerList}">List</a></li>

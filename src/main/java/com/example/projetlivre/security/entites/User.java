@@ -1,16 +1,16 @@
 package com.example.projetlivre.security.entites;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Transactional
 @Entity
 @Data
 @AllArgsConstructor
@@ -18,6 +18,7 @@ import java.util.List;
 @Builder
 public class User {
     @Id
+    @Column(unique = true)
     private String Id;
     @Column(unique = true)
     private String username;

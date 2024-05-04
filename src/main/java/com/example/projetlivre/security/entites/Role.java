@@ -15,4 +15,13 @@ import lombok.NoArgsConstructor;
 public class Role {
     @Id
     private String role;
+    // Getter method that adds the "ROLE_" prefix
+    public String getRole() {
+        // Check if the role already starts with "ROLE_"
+        if (!role.startsWith("ROLE_")) {
+            // If not, add the prefix
+            return "ROLE_" + role;
+        }
+        return role;
+    }
 }

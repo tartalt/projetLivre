@@ -1,5 +1,7 @@
 package com.example.projetlivre.entities;
 
+
+import com.example.projetlivre.security.entites.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,8 +19,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Owner {
+
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    @OneToOne
+    @MapsId
+    private User user;
     @NotBlank(message = "error firstName")
     private String firstName;
     @NotBlank(message = "error lastname")

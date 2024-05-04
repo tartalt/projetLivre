@@ -1,14 +1,23 @@
 package com.example.projetlivre.controllers;
 
 import com.example.projetlivre.entities.Livre;
+import com.example.projetlivre.entities.Owner;
+import com.example.projetlivre.security.services.CustomUserDetails;
+import com.example.projetlivre.services.OwnerService;
 import com.example.projetlivre.services.ServiceLivre;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
+
 
 import java.util.List;
 
@@ -17,7 +26,7 @@ import java.util.List;
 public class LivreController {
 
     private final ServiceLivre serviceLivre;
-
+    private final OwnerService ownerService;
     @RequestMapping("/ListeLivre")
     public String livreList(ModelMap modelMap,
                             @RequestParam(name="page",defaultValue = "0")int page,
@@ -37,8 +46,18 @@ public class LivreController {
     }
 
     @RequestMapping("/saveLivre")
-    public String saveLivre(@ModelAttribute("livre") Livre livre) {
+    public String saveLivre(@Valid @ModelAttribute("livre") Livre livre, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "ajouterLivre"; // Retourner vers le formulaire s'il y a des erreurs de validation
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner = ownerService.getOwnerByID(userDetails.getId());
+        livre.setOwner(owner);
+
         serviceLivre.saveLivre(livre);
+
         return "redirect:/ListeLivre"; // Redirect to LivreList after saving
     }
 

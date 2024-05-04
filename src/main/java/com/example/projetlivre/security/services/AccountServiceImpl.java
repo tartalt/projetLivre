@@ -1,5 +1,6 @@
 package com.example.projetlivre.security.services;
 
+import com.example.projetlivre.entities.Owner;
 import com.example.projetlivre.security.entites.Role;
 import com.example.projetlivre.security.entites.User;
 import com.example.projetlivre.security.repositories.RoleRepo;
@@ -34,6 +35,10 @@ public class AccountServiceImpl  implements AccountService{
                 .build();
         return userRepo.save(user);
 
+    }
+    @Override
+    public User saveUser(User user) {
+        return userRepo.save(user);
     }
 
     @Override

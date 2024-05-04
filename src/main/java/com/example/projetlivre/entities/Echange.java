@@ -1,5 +1,6 @@
 package com.example.projetlivre.entities;
 
+import com.example.projetlivre.enums.State;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class Echange {
     private long id;
     @PastOrPresent
     private Date creationDate;
-    private boolean accepted;
+    private State state= State.New;
     @PastOrPresent
     private Date acceptedDate;
     @ManyToOne

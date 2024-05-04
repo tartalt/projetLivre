@@ -10,9 +10,9 @@ import java.util.List;
 public interface OwnerService {
     Owner saveOwner(Owner owner);
     Owner updateOwner(Owner owner);
-    void deleteOwnerById(Long Id);
+    void deleteOwnerById(String Id);
     void deleteAllOwners();
-    Owner getOwnerByID(Long Id);
+    Owner getOwnerByID(String Id);
     List<Owner> getAllOwners();
     Page<Owner> getAllOwnersByPage(int page,int size);
 }
