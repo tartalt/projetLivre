@@ -1,31 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Hôte : 127.0.0.1
--- Généré le : lun. 06 mai 2024 à 00:34
--- Version du serveur : 10.4.27-MariaDB
--- Version de PHP : 8.2.0
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de données : `newtest`
---
-
--- --------------------------------------------------------
-
---
--- Structure de la table `echange`
---
 
 CREATE TABLE `echange` (
   `id` bigint(20) NOT NULL,
@@ -267,6 +241,3 @@ ALTER TABLE `user_roles`
   ADD CONSTRAINT `FKdt1fca9hsi6b8t4x9l1ds0tuj` FOREIGN KEY (`roles_role`) REFERENCES `role` (`role`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
