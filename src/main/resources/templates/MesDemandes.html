@@ -4,26 +4,52 @@
       layout:decorate="Template.html">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des demandes d'échanges reçues</title>
 </head>
 <body>
-<h1>Liste des demandes d'échanges reçues</h1>
+<div layout:fragment="content">
+<main>
+    <h1>Liste des demandes d'échanges reçues</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Livre demandé</th>
+            <th scope="col">Par</th>
+            <th scope="col">En échange de</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="echange: ${echanges}">
+            <td th:text="${echange.id}"></td>
+            <td th:text="${echange.livre2.titre}"></td>
+            <td><a th:href="@{Bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
+        </tr>
+        </tbody>
+<!--    </table>-->
+<!--    <h1>Liste des demandes d'échanges envoyées</h1>-->
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Livre demandé</th>
-        <th>Par</th>
-        <th>En échange de</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="echange : ${demandesEchange}">
-        <td th:text="${echange.owner1.nom + ' ' + echange.owner1.prenom}"></td>
-        <td th:text="${echange.livre2.titre}"></td>
-        <td><a th:href="@{'/bibliotheque/' + ${echange.owner1.id}}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
-    </tr>
-    </tbody>
-</table>
+<!--    <table>-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Livre demandé</th>-->
+<!--            <th>Par</th>-->
+<!--            <th>En échange de</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--&lt;!&ndash;        <tr th:each="echange : ${echange1}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${echange.owner1.firstname}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${echange.livre2.titre}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td><a th:href="@{/bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--        </tbody>-->
+    </table>
+</main>
+</div>
 </body>
+
 </html>

@@ -27,6 +27,13 @@ public class OwnerController {
     private OwnerService ownerService;
     @RequestMapping("/CreateOwner")
     public String createOwner(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Obtenir l'utilisateur connecté à partir de l'Authentication
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        if (userDetails.isCan()){
+            return "redirect:/ListeLivre";
+        }
         return "CreateOwner";
     }
     @RequestMapping("saveOwner")
@@ -49,7 +56,7 @@ public class OwnerController {
         accountService.removeRoleFromUser(user.getUsername(),"USER");
         accountService.addRoleToUser(user.getUsername(),"CONFIRMED");
         accountService.saveUser(user);
-        return "ListeLivre";
+        return "redirect:/ListeLivre";
     }
     @RequestMapping("/OwnerList")
     public String Ownerlist(ModelMap modelMap,
@@ -77,8 +84,6 @@ public class OwnerController {
     @RequestMapping("/EditOwner")
     public String EditOwner(@RequestParam("id") String id, ModelMap modelMap,Authentication authentication) {
         Owner owner = ownerService.getOwnerByID(id);
-
-
         // Vérifier si l'utilisateur connecté est autorisé à modifier cet Owner
         if (!isAdmin(authentication) && !isOwner(authentication, owner)) {
             // Si l'Owner n'appartient pas à l'utilisateur connecté, renvoyer un message d'erreur ou rediriger vers une autre page

@@ -1,14 +1,16 @@
 package com.example.projetlivre.controllers;
-
+import com.example.projetlivre.entities.Echange;
 import com.example.projetlivre.entities.Livre;
 import com.example.projetlivre.entities.Owner;
-import com.example.projetlivre.repositories.LivreRepo;
+import com.example.projetlivre.enums.State;
 import com.example.projetlivre.security.services.CustomUserDetails;
+import com.example.projetlivre.services.EchangeService;
 import com.example.projetlivre.services.OwnerService;
 import com.example.projetlivre.services.ServiceLivre;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.Authentication;
-
-
 import java.util.List;
 
 @Controller
@@ -28,48 +28,92 @@ public class LivreController {
 
     private final ServiceLivre serviceLivre;
     private final OwnerService ownerService;
+    private final EchangeService echangeService;
     @RequestMapping("/ListeLivre")
     public String livreList(ModelMap modelMap,
                             @RequestParam(name="page",defaultValue = "0")int page,
                             @RequestParam(name="size",defaultValue = "5")int size) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner=ownerService.getOwnerByID(userDetails.getId());
+        Echange Echange1 = null;
         Page<Livre> livres = serviceLivre.getAllLivresByPage(page, size);
+        Echange1=trouveEchangeP(livres,owner);
         modelMap.addAttribute("livres", livres);
         modelMap.addAttribute("currentpage",page);
         modelMap.addAttribute("pages",new int[livres.getTotalPages()]);
+        modelMap.addAttribute("echange",Echange1);
         return "ListeLivre"; // Assuming LivreList.html exists
     }
+
     @RequestMapping("/Bibliotheque")
     public String Bibliotheque(@RequestParam("id") String id,
                                ModelMap modelMap,
                                @RequestParam(name = "page", defaultValue = "0") int page,
                                @RequestParam(name = "size", defaultValue = "5") int size) {
         // Récupérer l'owner à partir de l'ID
-        Owner owner = ownerService.getOwnerByID(id);
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner2 = ownerService.getOwnerByID(userDetails.getId());
+        Owner owner1 = ownerService.getOwnerByID(id);
+        Echange Echange1 = null;
         // Vérifier si l'owner existe
-        if (owner == null) {
-            // Gérer le cas où l'owner n'existe pas
-            return "OwnerNotFound"; // page à afficher en cas de propriétaire non trouvé
-        }
-        LivreRepo livreRepo;
-        // Récupérer tous les livres disponibles associés à cet owner
-        List<Livre> livres = serviceLivre.getAllLivresDisponiblesByOwner(owner);
-        // Pagination
+        List<Livre> livres = serviceLivre.getAllLivresDisponiblesByOwner(owner1);
+        Echange1=trouveEchange(livres,owner2);
         int start = page * size;
         int end = Math.min(start + size, livres.size());
         List<Livre> livresPage = livres.subList(start, end);
-        // Ajouter les attributs à ModelMap
-        modelMap.addAttribute("livres", livresPage);
-        modelMap.addAttribute("currentpage", page);
-        modelMap.addAttribute("pages", new int[(int) Math.ceil((double) livres.size() / size)]);
-        modelMap.addAttribute("size", size);
-        modelMap.addAttribute("id", id); // passer l'ID de l'owner à la vue
 
-        return "Bibliotheque"; // Assuming LivreList.html exists
+            if (owner1 == null) {
+                // Gérer le cas où l'owner n'existe pas
+                return "redirect:/ListeLivre"; // page à afficher en cas de propriétaire non trouvé
+            }
+            // Ajouter les attributs à ModelMap
+            modelMap.addAttribute("livres", livresPage);
+            modelMap.addAttribute("currentpage", page);
+            modelMap.addAttribute("pages", new int[(int) Math.ceil((double) livres.size() / size)]);
+            modelMap.addAttribute("size", size);
+            modelMap.addAttribute("id", id);
+            modelMap.addAttribute("echange",Echange1);// passer l'ID de l'owner à la vue
+
+            return "Bibliotheque"; // Assuming LivreList.html exists
     }
+    Echange trouveEchange(List<Livre> livres,Owner owner2) {
+        Echange Echange1 = null;
+        for (Livre livre : livres) {
+            Echange1 = echangeService.getEchangeByOwner1Livre2ByState(owner2, livre,State.New);
+            if (!(Echange1 == null)) {
+                return Echange1;
+            }
+        }
+        return Echange1;
+    }
+    Echange trouveEchangeP(Page<Livre> livres,Owner owner2) {
+        Echange Echange1 = null;
+        Echange Echange2 =null;
+        Echange Echange3=null;
+        for (Livre livre : livres) {
+            Echange1 = echangeService.getEchangeByOwner1Owner2ByState(owner2, livre.getOwner(),State.New);
+            Echange2 = echangeService.getEchangeByOwner1Owner2ByState(livre.getOwner(),owner2,State.New);
+            if (!(Echange1 == null)||!(Echange2 == null)) {
+                if (!(Echange1 == null)){
+                    Echange3 =Echange1;
+                } else if (!(Echange2 == null)) {
+                    Echange3 =Echange2;
+                }
+                return Echange3;
+            }
 
+        }
+        return Echange1;
+    }
     @RequestMapping("/ajouterLivre")
     public String addLivre(ModelMap modelMap) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        if(!userDetails.isCan()){
+            return "redirect:/CreateOwner";
+        }
         Livre livre = new Livre(); // Create a new Livre object for form binding
         modelMap.addAttribute("livre", livre);
         return "ajouterLivre"; // Assuming AddLivre.html exists
@@ -115,4 +159,6 @@ public class LivreController {
         serviceLivre.deleteLivreById(id);
         return "redirect:/ListeLivre"; // Redirect to LivreList after deleting
     }
+
+
 }

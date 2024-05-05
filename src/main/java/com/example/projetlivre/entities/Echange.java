@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 public class Echange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +24,15 @@ public class Echange {
     private State state= State.New;
     @PastOrPresent
     private Date acceptedDate;
+    @PastOrPresent
+    private Date refusedDate;
+
     @ManyToOne
     private Owner owner1;
-
     @ManyToOne
     private Owner owner2;
-
     @ManyToOne
     private Livre livre1;
-
     @ManyToOne
     private Livre livre2;
 }

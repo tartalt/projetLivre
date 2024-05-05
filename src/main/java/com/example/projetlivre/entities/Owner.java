@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 public class Owner {
 
     @Id
@@ -40,6 +40,6 @@ public class Owner {
     @Column
     private boolean possede;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<Livre> livres=new ArrayList<>();
 }

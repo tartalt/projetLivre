@@ -25,4 +25,5 @@ public class Livre {
     private boolean disponible;
     @ManyToOne
     private Owner owner;
+
 }

@@ -21,12 +21,15 @@ public class ProjetLivreApplication {
 ////            accountService.createUser("normal","123","123");
 ////            accountService.createRole("ADMIN");
 ////            accountService.createRole("USER");
-//            accountService.createRole("CONFIRMED");
+////            accountService.createRole("CONFIRMED");
 ////            accountService.addRoleToUser("admin","ADMIN");
 ////            accountService.addRoleToUser("normal","USER");
 ////            accountService.addRoleToUser("normal","CONFIRMED");
-
-//            accountService.createUser("test","123","123", Owner.builder().build());
+////
+////            accountService.createUser("test","123","123");
+////                accountService.addRoleToUser("test","USER");
+////                accountService.removeRoleFromUser("normal","USER");
+////                accountService.addRoleToUser("normal","CONFIRMED");
 //        };
 //    }
 }
