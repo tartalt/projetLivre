@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 public class Livre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

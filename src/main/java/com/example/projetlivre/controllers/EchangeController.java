@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
+
 @Controller
 @AllArgsConstructor
 public class EchangeController {
@@ -40,7 +42,7 @@ public class EchangeController {
     }
 
     @GetMapping("/demander")
-    public String proposeEchange(@PathVariable("id") Long id, ModelMap modelMap, Authentication authentication) {
+    public String proposeEchange(@RequestParam("id") Long id, Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Owner owner = ownerService.getOwnerByID(userDetails.getId());
         if(!owner.isPossede()){
@@ -51,14 +53,13 @@ public class EchangeController {
         //dans ma logique la personne qui demande un livre est le owner1
         //donc le owner2 possede le livre2 dans l'echange
         echange.setLivre2(livre);
-
+        echange.setCreationDate(new Date());
         // Get the logged-in owner
-
         echange.setOwner1(owner);
         echange.setOwner2(livre.getOwner());
-        modelMap.addAttribute("echange", echange);
-        modelMap.addAttribute("livresDisponibles", serviceLivre.getAllLivresDisponiblesByOwner(owner));
-        return "ListeLivre"; // Assuming ProposerEchange.html exists
+        serviceLivre.saveLivre(livre);
+        echangeService.saveEchange(echange);
+        return "redirect:/ListeLivre"; // Assuming ProposerEchange.html exists
     }
 
     @PostMapping("/saveEchange")

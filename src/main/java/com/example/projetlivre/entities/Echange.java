@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 public class Echange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
