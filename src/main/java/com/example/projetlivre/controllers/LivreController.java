@@ -35,6 +35,10 @@ public class LivreController {
                             @RequestParam(name="size",defaultValue = "5")int size) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        if (!(((CustomUserDetails) authentication.getPrincipal()).isCan())){
+            return "redirect:/CreateOwner";
+        }
+
         Owner owner=ownerService.getOwnerByID(userDetails.getId());
         Echange Echange1 = null;
         Page<Livre> livres = serviceLivre.getAllLivresByPage(page, size);

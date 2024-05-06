@@ -23,9 +23,9 @@ public class SecurityConfig  {
         return httpSecurity.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
-                        authCustomizer ->authCustomizer.requestMatchers("/OwnerList","/DeleteOwner","/UpdateOwner").hasRole("ADMIN")
-                                .requestMatchers("/DeleteLivre","/ajouterLivre","/EditLivre","/saveLivre","/ListeLivre","/EditOwner").hasAnyRole("ADMIN","CONFIRMED")
-                                .requestMatchers("/ListeLivre","/saveOwner","/CreateOwner").hasAnyRole("ADMIN","USER")
+                        authCustomizer ->authCustomizer.requestMatchers("/OwnerList","/DeleteOwner").hasRole("ADMIN")
+                                .requestMatchers("/DeleteLivre","/ajouterLivre","/EditLivre","/saveLivre","/EditOwner","/UpdateOwner").hasAnyRole("ADMIN","CONFIRMED")
+                                .requestMatchers("/CreateOwner","/UpdateOwner").hasAnyRole("ADMIN","USER")
                                 .requestMatchers("/saveOwner","/ListeLivre").authenticated()
                                 .anyRequest().authenticated()
                 )

@@ -12,27 +12,29 @@
 <body>
 <div layout:fragment="content">
 <main class="container mt-5">
-    <form th:action="@{UpdateOwner}" method="post" >
+    <form th:action="@{UpdateOwner}" method="post"  class="row g-3 needs-validation" novalidate>
+
+
         <div class="form-group">
                         <label hidden="hidden" for="id">First Name : </label>
                         <input hidden="hidden"  id="id" name="id" th:value="${ownersVue.id}">
                     </div>
-        <div class="col-md-6 position-relative">
+        <div class="col-md-4 position-relative">
             <label for="validationTooltip01" class="form-label">First name ‍</label>
             <input  class="form-control" id="validationTooltip01" type="text" name="firstName" th:value="${ownersVue.firstName}" >
         </div>
-        <div class="col-md-6 position-relative">
+        <div class="col-md-4 position-relative">
             <label for="validationTooltip02" class="form-label">Last name ‍</label>
             <input class="form-control" id="validationTooltip02" type="text" name="lastName" th:value="${ownersVue.lastName}" >
 
         </div>
-        <div class="col-md-6 position-relative">
+        <div class="col-md-4 position-relative">
             <label for="validationTooltip03" class="form-label">Email </label>
             <input  class="form-control" id="validationTooltip03" type="email" name="email" th:value="${ownersVue.email}" >
 
         </div>
         <div class="col-md-6 position-relative">
-            <label for="validationTooltip04" class="form-label">Address </label>
+            <label for="validationTooltip04" class="fom-label">Address </label>
             <input  class="form-control" id="validationTooltip04" type="text"  name="address"th:value="${ownersVue.address}" >
 
         </div>

@@ -36,7 +36,7 @@ public class OwnerController {
         }
         return "CreateOwner";
     }
-    @RequestMapping("saveOwner")
+    @RequestMapping("/SaveOwner")
     public String saveOwner(@Valid Owner owner, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "CreateOwner";
@@ -103,7 +103,7 @@ public class OwnerController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return owner.getUser().getId().equals(userDetails.getId());
     }
-    @RequestMapping("/UpdateOwner")
+    @RequestMapping("/UpdateOwner" )
     public String UpdateOwner(@ModelAttribute("ownerVue")Owner owner){
         ownerService.updateOwner(owner);
         return createOwner();
