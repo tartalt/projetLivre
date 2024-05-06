@@ -40,6 +40,4 @@ public class Owner {
     @Column
     private boolean possede;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private List<Livre> livres=new ArrayList<>();
 }

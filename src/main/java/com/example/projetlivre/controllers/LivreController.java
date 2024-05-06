@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.Authentication;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,16 +40,16 @@ public class LivreController {
         if (!(((CustomUserDetails) authentication.getPrincipal()).isCan())){
             return "redirect:/CreateOwner";
         }
-
         Owner owner=ownerService.getOwnerByID(userDetails.getId());
-        Echange Echange1 = null;
+        List<Echange> Echange1 = null;
         Page<Livre> livres = serviceLivre.getAllLivresByPage(page, size);
         Echange1=trouveEchangeP(livres,owner);
+
         modelMap.addAttribute("livres", livres);
         modelMap.addAttribute("currentpage",page);
         modelMap.addAttribute("pages",new int[livres.getTotalPages()]);
         modelMap.addAttribute("echange",Echange1);
-        return "ListeLivre"; // Assuming LivreList.html exists
+        return "ListeLivre";
     }
 
     @RequestMapping("/Bibliotheque")
@@ -92,33 +94,36 @@ public class LivreController {
         }
         return Echange1;
     }
-    Echange trouveEchangeP(Page<Livre> livres,Owner owner2) {
-        Echange Echange1 = null;
-        Echange Echange2 =null;
-        Echange Echange3=null;
+    List<Echange> trouveEchangeP(Page<Livre> livres,Owner owner2) {
+        List<Echange> Echange3 = new ArrayList<>();
         for (Livre livre : livres) {
-            Echange1 = echangeService.getEchangeByOwner1Owner2ByState(owner2, livre.getOwner(),State.New);
-            Echange2 = echangeService.getEchangeByOwner1Owner2ByState(livre.getOwner(),owner2,State.New);
-            if (!(Echange1 == null)||!(Echange2 == null)) {
-                if (!(Echange1 == null)){
-                    Echange3 =Echange1;
+            Echange Echange1 = null;
+            Echange Echange2 = null;
+            Echange1 = echangeService.getEchangeByOwner1Owner2ByState(owner2, livre.getOwner(), State.New);
+            Echange2 = echangeService.getEchangeByOwner1Owner2ByState(livre.getOwner(), owner2, State.New);
+            if (!(Echange1 == null) || !(Echange2 == null)) {
+                if (!(Echange1 == null)) {
+                    Echange3.add(Echange1);
                 } else if (!(Echange2 == null)) {
-                    Echange3 =Echange2;
+                    Echange3.add(Echange2);
                 }
-                return Echange3;
             }
-
         }
-        return Echange1;
+        return Echange3;
     }
     @RequestMapping("/ajouterLivre")
     public String addLivre(ModelMap modelMap) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner = ownerService.getOwnerByID(userDetails.getId());
         if(!userDetails.isCan()){
             return "redirect:/CreateOwner";
         }
-        Livre livre = new Livre(); // Create a new Livre object for form binding
+        Livre livre = new Livre();
+        if (!owner.isPossede()){
+            owner.setPossede(true);
+            ownerService.updateOwner(owner);
+        }
         modelMap.addAttribute("livre", livre);
         return "ajouterLivre"; // Assuming AddLivre.html exists
     }

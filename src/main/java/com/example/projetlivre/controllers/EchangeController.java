@@ -10,10 +10,7 @@ import com.example.projetlivre.services.EchangeService;
 import com.example.projetlivre.services.OwnerService;
 import com.example.projetlivre.services.ServiceLivre;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -41,7 +39,22 @@ public class EchangeController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Owner owner = ownerService.getOwnerByID(userDetails.getId());
         List<Echange> echanges=echangeService.getAllEchnageByOwner(owner);
-        modelMap.addAttribute("echanges",echanges);
+        List<Echange> demandesEnvoyees = echanges.stream()
+                .filter(echange -> echange.getOwner1().equals(owner) && echange.getState().equals(State.New))
+                .collect(Collectors.toList());
+
+        List<Echange> demandesRecues = echanges.stream()
+                .filter(echange -> echange.getOwner2().equals(owner) && echange.getState().equals(State.New))
+                .collect(Collectors.toList());
+
+        List<Echange> demandesArchivees = echanges.stream()
+                .filter(echange -> echange.getState().equals(State.Finished))
+                .collect(Collectors.toList());
+
+        // Ajouter les listes à ModelMap pour les afficher dans la vue
+        modelMap.addAttribute("demandesEnvoyees", demandesEnvoyees);
+        modelMap.addAttribute("demandesRecues", demandesRecues);
+        modelMap.addAttribute("demandesArchivees", demandesArchivees);
         return "MesDemandes"; // Assuming EchangeList.html exists
     }
     @GetMapping("/demander")
@@ -57,17 +70,15 @@ public class EchangeController {
         Echange echange = new Echange();
         Echange testechange=null;
         Echange testechange2=null;
-        testechange  = echangeService.getEchangeByOwner1Owner2(owner,livre.getOwner());
-        testechange2 = echangeService.getEchangeByOwner1Owner2(livre.getOwner(),owner);
-        if(!(testechange ==null) && !(testechange2==null)){
+        testechange  = echangeService.getEchangeByOwner1Owner2ByState(owner,livre.getOwner(),State.New);
+        testechange2 = echangeService.getEchangeByOwner1Owner2ByState(livre.getOwner(),owner,State.New);
+        if(!(testechange ==null) || !(testechange2==null)){
             return "redirect:/accessDenied";
         }
         echange.setLivre2(livre);
         echange.setCreationDate(new Date());
-        // Get the logged-in owner
         echange.setOwner1(owner);
         echange.setOwner2(livre.getOwner());
-        serviceLivre.saveLivre(livre);
         echangeService.saveEchange(echange);
         return "redirect:/ListeLivre"; // Assuming ProposerEchange.html exists
     }
@@ -78,14 +89,19 @@ public class EchangeController {
                                 Authentication authentication){
        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
        Owner owner = ownerService.getOwnerByID(userDetails.getId());
-       Livre livre=serviceLivre.getLivreByID(id);
+       Livre livre1 =serviceLivre.getLivreByID(id);
        Echange echange=echangeService.getEchangeById(ide);
+       Livre livre2=serviceLivre.getLivreByID(echange.getLivre2().getId());
        if (!(echange.getOwner1()==owner)){
            return "redirect:/ListeLivre";
        }
-       echange.setLivre1(livre);
+       echange.setLivre1(livre1);
        echange.setState(State.Finished);
        echange.setAcceptedDate(new Date());
+       livre1.setDisponible(false);
+       livre2.setDisponible(false);
+       serviceLivre.saveLivre(livre1);
+       serviceLivre.saveLivre(livre2);
        echangeService.saveEchange(echange);
        return "redirect:/ListeLivre";
    }
@@ -102,5 +118,19 @@ public class EchangeController {
         echange.setRefusedDate(new Date());
         echangeService.saveEchange(echange);
         return "redirect:/ListeLivre";
+    }
+    @RequestMapping("/Annuler")
+    public String annulerEchange(@RequestParam("id")Long id,
+                                 Authentication authentication){
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner = ownerService.getOwnerByID(userDetails.getId());
+        Echange echange=echangeService.getEchangeById(id);
+        if (!(echange.getOwner1()==owner)){
+            return "redirect:/ListeLivre";
+        }
+        echange.setState(State.Finished);
+        echange.setRefusedDate(new Date());
+        echangeService.saveEchange(echange);
+        return "redirect:/MesDemandes";
     }
 }

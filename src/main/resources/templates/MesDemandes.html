@@ -23,12 +23,46 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="echange: ${echanges}">
+        <tr th:each="echange: ${demandesRecues}">
             <td th:text="${echange.id}"></td>
             <td th:text="${echange.livre2.titre}"></td>
-            <td><a th:href="@{Bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
+            <td><a th:href="@{Bibliotheque(id=${echange.owner2.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
         </tr>
         </tbody>
+    </table>
+        <h1>Liste des demandes d'échanges Evoyées</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Livre demandé</th>
+                <th scope="col">Par</th>
+                <th scope="col">En échange de</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="echange: ${demandesEnvoyees}">
+                <td th:text="${echange.id}"></td>
+                <td th:text="${echange.livre2.titre}"></td>
+                <td><a th:href="@{Annuler(id=${echange.id})}" class="btn btn-primary">Annuler la demande</a></td>
+            </tr>
+            </tbody>
+        </table>
+    <h1>Liste des demandes d'échanges Archivée</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Livre demandé</th>
+            <th scope="col">Par</th>
+            <th scope="col">En échange de</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="echange: ${demandesArchivees}">
+            <td th:text="${echange.id}"></td>
+            <td th:text="${echange.livre2.titre}"></td>
+        </tr>
+        </tbody>
+    </table>
 <!--    </table>-->
 <!--    <h1>Liste des demandes d'échanges envoyées</h1>-->
 
@@ -47,7 +81,7 @@
 <!--&lt;!&ndash;            <td><a th:href="@{/bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>&ndash;&gt;-->
 <!--&lt;!&ndash;        </tr>&ndash;&gt;-->
 <!--        </tbody>-->
-    </table>
+
 </main>
 </div>
 </body>
