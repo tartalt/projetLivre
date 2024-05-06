@@ -23,9 +23,10 @@ public class SecurityConfig  {
         return httpSecurity.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
-                        authCustomizer ->authCustomizer.requestMatchers("/OwnerList","/DeleteOwner","/UpdateOwner","EditOwner").hasRole("ADMIN")
-                                .requestMatchers("/DeleteLivre","/ajouterLivre","/EditLivre","/saveLivre","/ListeLivre","/EditOwner").hasRole("CONFIRMED")
-                                .requestMatchers("/DeleteLivre","/saveOwner","/ajouterLivre","/EditLivre","/saveLivre","/ListeLivre").hasRole("USER")
+                        authCustomizer ->authCustomizer.requestMatchers("/OwnerList","/DeleteOwner","/UpdateOwner").hasRole("ADMIN")
+                                .requestMatchers("/DeleteLivre","/ajouterLivre","/EditLivre","/saveLivre","/ListeLivre","/EditOwner").hasAnyRole("ADMIN","CONFIRMED")
+                                .requestMatchers("/ListeLivre","/saveOwner","/CreateOwner").hasAnyRole("ADMIN","USER")
+                                .requestMatchers("/saveOwner","/ListeLivre").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(e->e.accessDeniedPage("/accessDenied"))

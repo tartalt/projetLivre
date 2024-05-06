@@ -26,38 +26,40 @@
                     <li>
                         <a th:href="@{/ajouterLivre}" class="dropdown-item">Ajouter un livre</a>
                     </li>
+                    <li>
+                        <a th:href="@{/MesDemandes(id=${#authentication.principal.id})}" class="dropdown-item">Mes Demandes</a>
+                    </li>
                 </ul>
             </li>
         </ul>
     </nav>
+    </ul>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Customers</a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+            th:text="${#authentication.principal.username}"
+            >[username]</a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item"
                        th:if="${#authentication.isAuthenticated() and not #authentication.principal.can}"
                        th:href="@{CreateOwner}">New</a>
                 </li>
-                <li>
-                    <a class="dropdown-item" th:href="@{OwnerList}">List</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-            th:text="${#authentication.name}"
-            >[username]</a>
-            <ul class="dropdown-menu">
                 <a sec:authorize="!isAuthenticated()" class="dropdown-item" href="#">login</a>
                 <form method="post" th:action="@{/logout}">
                     <button sec:authorize="isAuthenticated()" class="dropdown-item" type="submit">logout</button>
                 </form>
+                <li>
+                    <a class="dropdown-item"
+                       th:if="${#authentication.isAuthenticated() and #authentication.principal.can}"
+                       th:href="@{EditOwner(id=${#authentication.principal.id})}">Editer Mes Informations</a>
+                </li>
 
             </ul>
         </li>
     </ul>
+    </nav>
 </nav>
 <main class="container mt-5">
     <div layout:fragment="content">

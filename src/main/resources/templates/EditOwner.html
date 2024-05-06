@@ -12,33 +12,37 @@
 <body>
 <div layout:fragment="content">
 <main class="container mt-5">
-    <form th:action="@{UpdateOwner}" method="post">
+    <form th:action="@{UpdateOwner}" method="post" >
         <div class="form-group">
-            <label hidden="hidden" for="id">First Name : </label>
-            <input hidden="hidden" type="text" id="id" name="id" th:value="${ownersVue.id}">
+                        <label hidden="hidden" for="id">First Name : </label>
+                        <input hidden="hidden"  id="id" name="id" th:value="${ownersVue.id}">
+                    </div>
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip01" class="form-label">First name ‍</label>
+            <input  class="form-control" id="validationTooltip01" type="text" name="firstName" th:value="${ownersVue.firstName}" >
         </div>
-        <div class="form-group">
-            <label class="form-label" for="firstName">First Name : </label>
-            <input  class="form-control" type="text" id="firstName" name="firstName" th:value="${ownersVue.firstName}">
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip02" class="form-label">Last name ‍</label>
+            <input class="form-control" id="validationTooltip02" type="text" name="lastName" th:value="${ownersVue.lastName}" >
+
         </div>
-        <div class="form-group">
-            <label class="form-label" for="lastName">Last Name : </label>
-            <input class="form-control" type="text" id="lastName" name="lastName" th:value="${ownersVue.lastName}">
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip03" class="form-label">Email </label>
+            <input  class="form-control" id="validationTooltip03" type="email" name="email" th:value="${ownersVue.email}" >
+
         </div>
-        <div class="form-group">
-            <label class="form-label" for="email">Email : </label>
-            <input class="form-control" type="email" id="email" name="email" th:value="${ownersVue.email}">
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip04" class="form-label">Address </label>
+            <input  class="form-control" id="validationTooltip04" type="text"  name="address"th:value="${ownersVue.address}" >
+
         </div>
-        <div class="form-group">
-            <label class="form-label" for="address">Address : </label>
-            <input class="form-control" type="text" id="address" name="address" th:value="${ownersVue.address}">
+        <div class="col-md-6 position-relative">
+            <label for="validationTooltip05" class="form-label">Phone </label>
+            <input  class="form-control" id="validationTooltip05" type="text" name="phone"th:value="${ownersVue.phone}" >
+
         </div>
-        <div>
-            <label class="form-label" for="phone">phone : </label>
-            <input class="form-control" type="text" id="phone" name="phone" th:value="${ownersVue.phone}">
-        </div>
-        <div class="form-group">
-            <input class="form-control btn btn-primary" type="submit" th:value="Edit">
+        <div class="col-12">
+            <input class="btn btn-primary" type="submit" th:value="Edit">
         </div>
     </form>
 
