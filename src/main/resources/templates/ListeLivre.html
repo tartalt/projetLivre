@@ -36,34 +36,69 @@
                 <a th:href="@{EditLivre(id=${livre.id})}" class="btn btn-primary">Edit</a>
                 <a th:href="@{DeleteLivre(id=${livre.id})}" onclick="return confirm('Are you sure you want to delete this book?')" class="btn btn-danger">Delete</a>
             </span>
-                <span th:if="${!#lists.isEmpty(echange)}">
+
+<!--                <span th:if="${!#lists.isEmpty(echange)}">-->
+<!--                        <span th:each="currentEchange : ${echange}">-->
+<!--                            <span th:if="${currentEchange.livre1 != null or currentEchange.livre2 != null}">-->
+<!--&lt;!&ndash;                                 <span th:with="con=${currentEchange.livre1.id == livre.id or currentEchange.livre2.id == livre.id}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <span th:if="${con}">&ndash;&gt;-->
+<!--                                    <span th:with="isOwner1=${#authentication.principal.id == currentEchange.owner1.id }">-->
+<!--                                        <span th:with="isOwner2=${#authentication.principal.id == currentEchange.owner2.id}">-->
+<!--                                            <span th:if="${#authentication.principal.id != livre.owner.id and (isOwner1 or isOwner2)}">-->
+<!--                                                <span th:if="${isOwner1}">-->
+<!--                                                    &lt;!&ndash; Si l'utilisateur connecté est l'utilisateur 1 dans l'échange &ndash;&gt;-->
+<!--                                                    <p>Cet utilisateur vous a fait une demande, consultez vos demandes</p>-->
+<!--                                                </span>-->
+<!--                                                <span th:if="${isOwner2}">-->
+<!--                                                    &lt;!&ndash; Si l'utilisateur connecté est l'utilisateur 2 dans l'échange &ndash;&gt;-->
+<!--                                                    &lt;!&ndash; Vous pouvez personnaliser ce message selon vos besoins &ndash;&gt;-->
+<!--                                                    <p>Vous avez déjà demandé un livre à cet utilisateur</p>-->
+<!--                                                </span>-->
+<!--                                            </span>-->
+<!--                                        </span>-->
+<!--                                    </span>-->
+<!--                                </span>-->
+
+<!--                            </span>-->
+<!--&lt;!&ndash;                    <span th:unless="${con}"> </span>&ndash;&gt;-->
+<!--                        </span></span>-->
+
+<!--                </span>-->
+                <span th:if="${not #lists.isEmpty(echange)}">
+    <span th:with="alreadyDisplayed = false"></span>
     <span th:each="currentEchange : ${echange}">
-        <span th:if="${currentEchange.livre1 != null or currentEchange.livre2 != null}">
-            <span th:if="${currentEchange.livre1 != null and currentEchange.livre1.id == livre.id or
-                           currentEchange.livre2 != null and currentEchange.livre2.id == livre.id}">
-                <span th:with="isOwner1=${#authentication.principal.id == currentEchange.owner1.id }">
-                    <span th:with="isOwner2=${#authentication.principal.id == currentEchange.owner2.id}">
-                        <span th:if="${#authentication.principal.id != livre.owner.id and (isOwner1 or isOwner2)}">
-                            <span th:if="${isOwner1}">
-                                <!-- Si l'utilisateur connecté est l'utilisateur 1 dans l'échange -->
-                                <p>Cet utilisateur vous a fait une demande, consultez vos demandes</p>
-                            </span>
-                            <span th:if="${isOwner2}">
-                                <!-- Si l'utilisateur connecté est l'utilisateur 2 dans l'échange -->
-                                <!-- Vous pouvez personnaliser ce message selon vos besoins -->
-                                <p>Vous avez déjà demandé un livre à cet utilisateur</p>
-                            </span>
+<!--        <span th:if="${!alreadyDisplayed}">-->
+            <span th:if="${currentEchange.livre1 != null}">
+<!--                <span th:if="${currentEchange.livre1 == livre}">-->
+                    <span th:with="isOwner1=${#authentication.principal.id == currentEchange.owner1.id }">
+                        <span th:if="${isOwner1}">
+                            <!-- Si l'utilisateur connecté est l'utilisateur 1 dans l'échange -->
+                            <p>Cet utilisateur vous a fait une demande, consultez vos demandes</p>
+                            <span th:with="alreadyDisplayed = true"></span>
                         </span>
                     </span>
-                </span>
+<!--                </span>-->
             </span>
+            <span th:if="${currentEchange.livre2 != null}">
+<!--                <span th:if="${currentEchange.livre2 == livre}">-->
+                    <span th:with="isOwner2=${#authentication.principal.id == currentEchange.owner2.id}">
+                        <span th:if="${isOwner2}">
+                            <!-- Si l'utilisateur connecté est l'utilisateur 2 dans l'échange -->
+                            <!-- Vous pouvez personnaliser ce message selon vos besoins -->
+                            <p>Vous avez déjà demandé un livre à cet utilisateur</p>
+                            <span th:with="alreadyDisplayed = true"></span>
+                        </span>
+                    </span>
+<!--                </span>-->
+<!--            </span>-->
         </span>
     </span>
-</span>
-
-                <span th:if="${ #authentication.principal.id != livre.owner.id}">
+                    <span th:unless="${ #authentication.principal.id == livre.owner.id}">
                     <a th:href="@{demander(id=${livre.id})}" class="btn btn-primary">Demander</a>
                 </span>
+</span>
+
+
             </td>
         </tr>
         </tbody>

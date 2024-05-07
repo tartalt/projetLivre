@@ -26,7 +26,7 @@
         <tr th:each="echange: ${demandesRecues}">
             <td th:text="${echange.id}"></td>
             <td th:text="${echange.livre2.titre}"></td>
-            <td><a th:href="@{Bibliotheque(id=${echange.owner2.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
+            <td><a th:href="@{Bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
         </tr>
         </tbody>
     </table>
