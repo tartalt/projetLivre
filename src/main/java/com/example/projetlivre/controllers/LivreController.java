@@ -61,13 +61,13 @@ public class LivreController {
                                ModelMap modelMap,
                                @RequestParam(name = "page", defaultValue = "0") int page,
                                @RequestParam(name = "size", defaultValue = "5") int size) {
-        // Récupérer l'owner à partir de l'ID
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Owner owner2 = ownerService.getOwnerByID(userDetails.getId());
         Owner owner1 = ownerService.getOwnerByID(id);
         Echange Echange1 = null;
-        // Vérifier si l'owner existe
+
         List<Livre> livres = serviceLivre.getAllLivresDisponiblesByOwner(owner1);
         Echange1=trouveEchange(livres,owner2);
         int start = page * size;
@@ -75,10 +75,10 @@ public class LivreController {
         List<Livre> livresPage = livres.subList(start, end);
 
             if (owner1 == null) {
-                // Gérer le cas où l'owner n'existe pas
-                return "redirect:/ListeLivre"; // page à afficher en cas de propriétaire non trouvé
+
+                return "redirect:/ListeLivre";
             }
-            // Ajouter les attributs à ModelMap
+
             modelMap.addAttribute("livres", livresPage);
             modelMap.addAttribute("currentpage", page);
             modelMap.addAttribute("pages", new int[(int) Math.ceil((double) livres.size() / size)]);
@@ -86,7 +86,7 @@ public class LivreController {
             modelMap.addAttribute("id", id);
             modelMap.addAttribute("echange",Echange1);// passer l'ID de l'owner à la vue
 
-            return "Bibliotheque"; // Assuming LivreList.html exists
+            return "Bibliotheque";
     }
     Echange trouveEchange(List<Livre> livres,Owner owner2) {
         Echange Echange1 = null;
@@ -169,13 +169,13 @@ public class LivreController {
         livre.setOwner(owner);
 
         serviceLivre.updateLivre(livre);
-        return "redirect:/ListeLivre"; // Redirect to LivreList after updating
+        return "redirect:/ListeLivre";
     }
 
     @RequestMapping("/DeleteLivre")
     public String deleteLivre(@RequestParam("id") Long id) {
         serviceLivre.deleteLivreById(id);
-        return "redirect:/ListeLivre"; // Redirect to LivreList after deleting
+        return "redirect:/ListeLivre";
     }
 
 

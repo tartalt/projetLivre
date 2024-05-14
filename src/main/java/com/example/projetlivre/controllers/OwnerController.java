@@ -29,7 +29,6 @@ public class OwnerController {
     public String createOwner(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Obtenir l'utilisateur connecté à partir de l'Authentication
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         if (userDetails.isCan()){
             return "redirect:/ListeLivre";
@@ -43,15 +42,12 @@ public class OwnerController {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Obtenir l'utilisateur connecté à partir de l'Authentication
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        // Obtenir l'ID de l'utilisateur connecté à partir de CustomUserDetails
         String userId = userDetails.getId();
         User user = accountService.loadUserByUsername(userDetails.getUsername());
         owner.setUser(user);
         Owner saveOwner=ownerService.saveOwner(owner);
-        // Update the 'can' attribute
+
         user.setCan(true);
         accountService.removeRoleFromUser(user.getUsername(),"USER");
         accountService.addRoleToUser(user.getUsername(),"CONFIRMED");
@@ -98,7 +94,6 @@ public class OwnerController {
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
     }
 
-    // Méthode pour vérifier si l'utilisateur est le propriétaire de l'Owner
     private boolean isOwner(Authentication authentication, Owner owner) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return owner.getUser().getId().equals(userDetails.getId());

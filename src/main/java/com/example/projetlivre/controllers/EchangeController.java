@@ -60,7 +60,7 @@ public class EchangeController {
         modelMap.addAttribute("demandesAcceptees", demandesAcceptee);
         modelMap.addAttribute("demandesRecues", demandesRecues);
         modelMap.addAttribute("demandesArchivees", demandesArchivees);
-        return "MesDemandes"; // Assuming EchangeList.html exists
+        return "MesDemandes";
     }
     @GetMapping("/demander")
     public String proposeEchange(@RequestParam("id") Long id,
@@ -85,7 +85,7 @@ public class EchangeController {
         echange.setOwner1(owner);
         echange.setOwner2(livre.getOwner());
         echangeService.saveEchange(echange);
-        return "redirect:/ListeLivre"; // Assuming ProposerEchange.html exists
+        return "redirect:/ListeLivre";
     }
 
    @RequestMapping("/choisir")
