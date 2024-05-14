@@ -39,7 +39,7 @@
                                         <a th:href="@{demander(id=${livre.id})}" class="btn btn-primary">Demander</a>
                                     </span>
 
-                                <span th:unless="${condition2}">
+                                <span th:unless="${!condition2}">
                                     <span th:if="${echange.owner1.id == #authentication.principal.id}">
                                         <a th:href="@{choisir(id=${livre.id},ide=${echange.id})}" class="btn btn-primary">Choisir</a>
                                     </span>

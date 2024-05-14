@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner and Echange Details</title>
+</head>
+<body>
+<div>
+    <h2>Details de l'échange</h2>
+    <p th:if="${owner.id == echange.owner1.id}">
+        Vous devez envoyer <strong th:text="${echange.livre2.titre}"></strong> à <strong th:text="${owner.user.nom} ${owner.user.prenom}"></strong> à l'adresse <strong th:text="${owner.adresse}"></strong>.
+    </p>
+    <p th:if="${owner.id == echange.owner2.id}">
+        Vous devez envoyer <strong th:text="${echange.livre1.titre}"></strong> à <strong th:text="${owner.user.nom} ${owner.user.prenom}"></strong> à l'adresse <strong th:text="${owner.adresse}"></strong>.
+    </p>
+    <p>Vous pouvez le contacter au téléphone <strong th:text="${owner.telephone}"></strong> ou à l'adresse email <strong th:text="${owner.email}"></strong>.</p>
+</div>
+</body>
+</html>

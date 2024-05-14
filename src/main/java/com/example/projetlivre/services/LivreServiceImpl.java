@@ -52,7 +52,7 @@ public class LivreServiceImpl implements ServiceLivre {
 
     @Override
     public Page<Livre> getAllLivresByPage(int page, int size) {
-        return livreRepo.findAll(PageRequest.of(page, size));
+        return livreRepo.findAllByDisponibleTrue(PageRequest.of(page, size));
     }
 
     @Override

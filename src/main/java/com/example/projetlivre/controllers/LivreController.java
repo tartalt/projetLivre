@@ -41,9 +41,15 @@ public class LivreController {
             return "redirect:/CreateOwner";
         }
         Owner owner=ownerService.getOwnerByID(userDetails.getId());
-        List<Echange> Echange1 = null;
+        List<Echange> Echange1 = new ArrayList<>();
         Page<Livre> livres = serviceLivre.getAllLivresByPage(page, size);
-        Echange1=trouveEchangeP(livres,owner);
+        int pages=livres.getTotalPages();
+        for (int i = 0; i < pages; i++) {
+            Page<Livre> currentPage = serviceLivre.getAllLivresByPage(i, size);
+            List<Echange> echangesPage = trouveEchangeP(currentPage, owner);
+            Echange1.addAll(echangesPage);
+        }
+
 
         modelMap.addAttribute("livres", livres);
         modelMap.addAttribute("currentpage",page);
@@ -146,8 +152,13 @@ public class LivreController {
     }
 
     @RequestMapping("/EditLivre")
-    public String editLivre(@RequestParam("id") Long id, ModelMap modelMap) {
+    public String editLivre(@RequestParam("id") Long id, ModelMap modelMap,Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner = ownerService.getOwnerByID(userDetails.getId());
         Livre livre = serviceLivre.getLivreByID(id);
+        if (!(owner ==livre.getOwner())){
+            return "redirect:/accessDenied";
+        }
         modelMap.addAttribute("livre", livre);
         return "EditLivre";
     }

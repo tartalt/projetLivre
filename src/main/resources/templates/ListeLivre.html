@@ -67,7 +67,7 @@
                 <span th:if="${not #lists.isEmpty(echange)}">
     <span th:with="alreadyDisplayed = false"></span>
     <span th:each="currentEchange : ${echange}">
-<!--        <span th:if="${!alreadyDisplayed}">-->
+<!--        <span th:if="${not alreadyDisplayed}">-->
             <span th:if="${currentEchange.livre1 != null}">
 <!--                <span th:if="${currentEchange.livre1 == livre}">-->
                     <span th:with="isOwner1=${#authentication.principal.id == currentEchange.owner1.id }">

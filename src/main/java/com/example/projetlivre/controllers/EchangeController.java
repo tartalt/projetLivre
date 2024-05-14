@@ -46,6 +46,10 @@ public class EchangeController {
         List<Echange> demandesRecues = echanges.stream()
                 .filter(echange -> echange.getOwner2().equals(owner) && echange.getState().equals(State.New))
                 .collect(Collectors.toList());
+        List<Echange> demandesAcceptee = echanges.stream()
+                .filter(echange -> (echange.getOwner2().equals(owner) || echange.getOwner1().equals(owner))
+                        && echange.getState().equals(State.Accepted))
+                .collect(Collectors.toList());
 
         List<Echange> demandesArchivees = echanges.stream()
                 .filter(echange -> echange.getState().equals(State.Finished))
@@ -53,6 +57,7 @@ public class EchangeController {
 
         // Ajouter les listes à ModelMap pour les afficher dans la vue
         modelMap.addAttribute("demandesEnvoyees", demandesEnvoyees);
+        modelMap.addAttribute("demandesAcceptees", demandesAcceptee);
         modelMap.addAttribute("demandesRecues", demandesRecues);
         modelMap.addAttribute("demandesArchivees", demandesArchivees);
         return "MesDemandes"; // Assuming EchangeList.html exists
@@ -96,7 +101,7 @@ public class EchangeController {
            return "redirect:/ListeLivre";
        }
        echange.setLivre1(livre1);
-       echange.setState(State.Finished);
+       echange.setState(State.Accepted);
        echange.setAcceptedDate(new Date());
        livre1.setDisponible(false);
        livre2.setDisponible(false);
@@ -132,5 +137,28 @@ public class EchangeController {
         echange.setRefusedDate(new Date());
         echangeService.saveEchange(echange);
         return "redirect:/MesDemandes";
+    }
+    @RequestMapping("/DetailEchange")
+    public String aficherDétail(@RequestParam("id")Long id,
+                                ModelMap modelMap,
+                                Authentication authentication){
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Owner owner = ownerService.getOwnerByID(userDetails.getId());
+        Echange echange=echangeService.getEchangeById(id);
+        if (echange.getOwner1()==owner && echange.getState()==State.Accepted){
+            Owner owner2 = echange.getOwner2();
+            modelMap.addAttribute("owner",owner2);
+            modelMap.addAttribute("echange",echange);
+            return "DetailEchange";
+        }
+        else if (echange.getOwner2()==owner && echange.getState()==State.Accepted){
+            Owner owner1 = echange.getOwner1();
+            modelMap.addAttribute("owner2",owner1);
+            modelMap.addAttribute("echange",echange);
+            return "DetailEchange";
+        }
+
+        return "AccessDenied";
+
     }
 }

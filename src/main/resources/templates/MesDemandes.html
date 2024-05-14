@@ -13,8 +13,9 @@
 <body>
 <div layout:fragment="content">
 <main>
-    <h1>Liste des demandes d'échanges reçues</h1>
+
     <table class="table table-striped">
+        <h1>Liste des demandes d'échanges reçues</h1>
         <thead>
         <tr>
             <th scope="col">Livre demandé</th>
@@ -29,6 +30,19 @@
             <td><a th:href="@{Bibliotheque(id=${echange.owner1.id})}" class="btn btn-primary">Consulter sa bibliothèque</a></td>
         </tr>
         </tbody>
+        <table class="table table-striped">
+            <h1>Liste des demandes d'échanges Acceptées</h1>
+            <thead>
+            <tr>
+                <th scope="col">Livre Concerné</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="echange: ${demandesAcceptees}">
+                <td th:text="${echange.livre2.titre}"></td>
+                <td><a th:href="@{DetailEchange(id=${echange.id})}" class="btn btn-primary">Consulter les détails </a></td>
+            </tr>
+            </tbody>
     </table>
         <h1>Liste des demandes d'échanges Evoyées</h1>
         <table class="table table-striped">
@@ -43,7 +57,7 @@
             <tr th:each="echange: ${demandesEnvoyees}">
                 <td th:text="${echange.id}"></td>
                 <td th:text="${echange.livre2.titre}"></td>
-                <td><a th:href="@{Annuler(id=${echange.id})}" class="btn btn-primary">Annuler la demande</a></td>
+                <td><a th:href="@{Annuler(id=${echange.id})}" onclick="return confirm('Are you sure you want to delete this request')"class="btn btn-primary">Annuler la demande</a></td>
             </tr>
             </tbody>
         </table>
