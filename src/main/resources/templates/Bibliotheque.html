@@ -35,16 +35,16 @@
                     <span th:unless="${condition}">
                         <span th:with="condition2=${echange==null}">
                             <span th:if="${!condition2}">
-                                    <span th:if="${echange.owner2.id == #authentication.principal.id}">
+                                    <span th:if="${echange.owner1.id == #authentication.principal.id}">
                                         <a th:href="@{demander(id=${livre.id})}" class="btn btn-primary">Demander</a>
                                     </span>
-
-                                <span th:unless="${!condition2}">
-                                    <span th:if="${echange.owner1.id == #authentication.principal.id}">
+ </span>
+                                <span th:unless="${condition2}">
+                                    <span th:if="${echange.owner2.id == #authentication.principal.id}">
                                         <a th:href="@{choisir(id=${livre.id},ide=${echange.id})}" class="btn btn-primary">Choisir</a>
                                     </span>
                                 </span>
-                            </span>
+
                         </span>
                     </span>
                 </td>

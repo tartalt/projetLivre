@@ -98,6 +98,13 @@ public class EchangeServiceImpl implements EchangeService{
     }
 
     @Override
+    public Echange getEchangeByOwner2Livre2ByState(Owner owner, Livre livre, State state) {
+        return echangeRepo.findEchangeByOwner2AndLivre2AndState(owner, livre, state);
+    }
+
+
+
+    @Override
     public Echange getEchangeByOwner1Owner2(Owner owner, Owner owner1) {
         return echangeRepo.findEchangeByOwner1AndOwner2(owner, owner1);
     }

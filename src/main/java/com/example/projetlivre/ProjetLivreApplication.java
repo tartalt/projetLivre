@@ -32,6 +32,8 @@ public class ProjetLivreApplication {
 //                accountService.addRoleToUser("normal","CONFIRMED");
   //  accountService.createUser("test1","123","123");
 //                accountService.addRoleToUser("test1","USER");
+//     accountService.createUser("test2","123","123");
+//                accountService.addRoleToUser("test2","USER");
 //        };
 //    }
 }

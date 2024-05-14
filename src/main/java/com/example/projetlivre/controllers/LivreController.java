@@ -49,8 +49,6 @@ public class LivreController {
             List<Echange> echangesPage = trouveEchangeP(currentPage, owner);
             Echange1.addAll(echangesPage);
         }
-
-
         modelMap.addAttribute("livres", livres);
         modelMap.addAttribute("currentpage",page);
         modelMap.addAttribute("pages",new int[livres.getTotalPages()]);
@@ -93,7 +91,7 @@ public class LivreController {
     Echange trouveEchange(List<Livre> livres,Owner owner2) {
         Echange Echange1 = null;
         for (Livre livre : livres) {
-            Echange1 = echangeService.getEchangeByOwner1Livre2ByState(owner2, livre,State.New);
+            Echange1 = echangeService.getEchangeByOwner2Livre2ByState(owner2, livre,State.New);
             if (!(Echange1 == null)) {
                 return Echange1;
             }

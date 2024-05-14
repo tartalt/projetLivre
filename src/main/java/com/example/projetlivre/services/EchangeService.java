@@ -29,7 +29,7 @@ public interface EchangeService {
     Echange getEchangeByOwner1Owner2ByState(Owner owner, Owner owner2,State state);
     List<Echange> getAllEchangeByOwner1(Owner owner);
     List<Echange> getAllEchangeByOwner2(Owner owner);
-   Echange getEchangeByOwner1Livre2ByState(Owner owner, Livre livre, State state);
-
+    Echange getEchangeByOwner1Livre2ByState(Owner owner, Livre livre, State state);
+    Echange getEchangeByOwner2Livre2ByState(Owner owner, Livre livre, State state);
     Echange getEchangeByOwner1Owner2(Owner owner, Owner owner1);
 }

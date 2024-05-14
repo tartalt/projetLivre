@@ -23,6 +23,6 @@ public interface EchangeRepo extends JpaRepository<Echange, Long> {
     List<Echange> findEchangeByOwner1AndLivre2AndState(Owner owner, State state,Livre livre);
     Echange findEchangeByOwner1AndOwner2(Owner owner,Owner owner2);
 
-
+    Echange findEchangeByOwner2AndLivre2AndState(Owner owner, Livre livre, State state);
 
 }
